@@ -12,6 +12,32 @@ def connect_to_db(host: str, port: int, dbname: str, user: str, password: str):
         typer.echo(f"Error connecting to PostgreSQL database: {e}")
         raise typer.Exit(code=1)
 
+def get_large_indexes(conn, dbname: str) -> List[str]:
+    """
+    Function to get large indexes from the database.
+    """
+    with conn.cursor() as cursor:
+        cursor.execute("""
+            SELECT indexrelid::regclass::text
+            FROM pg_stat_all_indexes
+            JOIN pg_class ON pg_class.oid = indexrelid
+            WHERE schemaname = %s
+              AND pg_relation_size(indexrelid) > (YOUR_SIZE_THRESHOLD_HERE)
+        """, (dbname,))
+        return [index[0] for index in cursor.fetchall()]
+
+def recreate_index(conn, index_name: str, dbname: str):
+    """
+    Function to recreate an index.
+    """
+    with conn.cursor() as cursor:
+        try:
+            cursor.execute(f"REINDEX INDEX CONCURRENTLY {index_name};")
+        except psycopg2.Error as e:
+            typer.echo(f"Error recreating index {index_name} on database {dbname}: {e}")
+            return False
+        return True
+
 def get_databases(conn, pattern: str, offset: int, limit: int) -> List[str]:
     with conn.cursor() as cursor:
         cursor.execute("""

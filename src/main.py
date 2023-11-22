@@ -54,14 +54,10 @@ def index_maintenance(
     for dbname in databases:
         typer.echo(f"Processing database: {dbname}")
 
-        # Check for invalid indexes
         invalid_indexes = check_invalid_indexes(conn, dbname)
         if invalid_indexes:
             typer.echo(f"Invalid indexes found in {dbname}: {invalid_indexes}")
             sys.exit(2)
-
-        # Here you would add the logic to list and recreate indexes
-        # Example: recreate_index(conn, 'index_name')
 
     conn.close()
 

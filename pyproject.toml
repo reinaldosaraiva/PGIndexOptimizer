@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "pgindexoptimizer"
+version = "0.1.0"
+description = "This script automates the maintenance of PostgreSQL database indexes. It connects to a PostgreSQL database server, iterates through the databases, and performs index maintenance tasks. These tasks include checking for corrupted indexes, recreating indexes concurrently, and reporting on reclaimed storage space."
+authors = ["Reinaldo Saraiva do Carmo <reinaldo.saraiva@gmail.com>"]
+license = "Beerware"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+psycopg2 = "^2.9.9"
+typer = "^0.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

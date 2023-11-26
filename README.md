@@ -18,7 +18,7 @@ This script automates the maintenance of PostgreSQL database indexes. It connect
 ## Installation
 Install required Python libraries using:
 ```bash
-pip install psycopg2 typer
+pip install -r requirements.txt
 ```
 
 ## Configuration
